@@ -4,11 +4,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import model.exceptions.DomainException;
+
 public class Reservation
 {
 	private static SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
 	private Integer roomNumber;
-	private Date chechin,chechout;
+	private Date chechin,chechout,now=new Date();
 	
 	public Reservation()
 	{
@@ -16,11 +18,20 @@ public class Reservation
 	}
 	public Reservation(Integer roomNumber, Date chechin, Date chechout) 
 	{
+		 if(!chechout.after(chechin))
+			{
+				throw new DomainException( "Error in reservation: Check-out date must be after check-in date");
+			}
+		 
+		 if(chechin.before(now) || chechout.before(now))
+		    {
+		    	throw new DomainException("Error in reservation: Reservation dates must be given in the future");
+		    }
+		 
 		this.roomNumber = roomNumber;
 		this.chechin = chechin;
 		this.chechout = chechout;
 	}
-
 	
 	public Integer getRoomNumber() 
 	{
@@ -32,19 +43,15 @@ public class Reservation
 		this.roomNumber = roomNumber;
 	}
 
-
 	public Date getChechin() 
 	{
 		return chechin;
 	}
 
-	
-
 	public Date getChechout() 
 	{
 		return chechout;
 	}
-
 	
 	public long duration()
 	{
@@ -53,24 +60,21 @@ public class Reservation
 		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 	}
 
-	public String UpdateDates(Date chechin, Date chechout)
-	{
-		 Date now=new Date();
+	public void UpdateDates(Date chechin, Date chechout) 
+	{	    
+		 if(chechin.before(now) || chechout.before(now)) 
+		 {
+		   throw new DomainException("Error in reservation: Reservation dates for update must be future dates");
+		 }
 		    
-		    if(chechin.before(now) || chechout.before(now))
-		    {
-		    	return "Error in reservation: Reservation dates for update must be future dates";
-		    }
-		    
-		    if(!chechout.after(chechin))
-			{
-				return "Error in reservation: Check-out date must be after check-in date";
-			}
+	     if(!chechout.after(chechin))
+	     {
+		   throw new DomainException( "Error in reservation: Check-out date must be after check-in date");
+		 }
 		    
 		this.chechin=chechin;
 		this.chechout=chechout;
 		
-		return null;
 	}
 	
 	@Override
