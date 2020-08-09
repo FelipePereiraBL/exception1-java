@@ -48,18 +48,16 @@ public class Program
 			
 		    System.out.println("----------");
 		    
-		    Date now=new Date();
+		    String error= reserva.UpdateDates(chechin, chechout);
 		    
-		    if(chechin.before(now) || chechout.before(now))
+		    if(error!=null)
 		    {
-		    	System.out.println("Error in reservation: Reservation dates for update must be future dates");
+		    	System.out.println(error);
 		    }
 		    else
 		    {
-		    	reserva.UpdateDates(chechin, chechout);
-		    	
-		    	System.out.println("Reservation: "+reserva);
-		    }			
+		    	 System.out.println("Reservation: "+reserva);
+		    }	   		
 			
 		}
 				
