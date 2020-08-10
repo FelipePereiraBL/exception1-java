@@ -66,9 +66,4 @@ public class Account
 		
 		balance-=amount;
 	}
-
-	public String toString()
-	{
-		return "New balance: R$"+String.format("%.2f",balance);
-	}
 }
